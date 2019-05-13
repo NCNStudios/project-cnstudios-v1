@@ -2,9 +2,9 @@
 This is a project in my learning process. Maps and location search.
 
 # 1. Operating environment
- ▶ Test operation on localhost. Download and install the XAMPP software package at: https://www.apachefriends.org/index.html
- ▶ Change Port Apache to 8080 (File httpd.conf)
- ▶ Change Https port to 4433 (File httpd-ssl.conf)
+Test operation on localhost. Download and install the XAMPP software package at: https://www.apachefriends.org/index.html
+Change Port Apache to 8080 (File httpd.conf)
+Change Https port to 4433 (File httpd-ssl.conf)
  
 # 2. Website package
  ▶ Download the project source code at: https://github.com/NCNStudios/project-cnstudios-v1
