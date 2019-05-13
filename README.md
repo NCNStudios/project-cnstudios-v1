@@ -14,7 +14,7 @@ This is a project in my learning process. Maps and location search.
  ▶ In the downloaded data, unzip the CNStudios.zip file to the Xampp htdocs installation directory, for example: C:\xampp\htdocs\CNStudios
  
 # 3. Restore the database
- ▶ Start Xampp => start Apache, MySQL => Go to PHPMySQL management page at: http://localhost:8080/phpmyadmin
+ ▶ Start Xampp => start Apache, MySQL => Go to PHPMySQL management page at: http://localhost:8080/phpmyadmin
  
  ▶ Login to initial account:
  
