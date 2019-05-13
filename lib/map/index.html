@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Pointer</title>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">   
+
+    <!-- Leaflet CDN -->
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
+    <script src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- Locate -->
+    <script src="js/L.Control.Locate.js"></script>
+    <link rel="stylesheet" href="css/L.Control.Locate.min.css" />
+
+    <!-- Search-->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+</head>
+
+<body>
+    <div class="embed">
+        <div id="mapDiv" ></div>
+    </div>
+    
+    <div class='pointer'></div>
+    
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <!-- CREATE MAP -->
+    <script>
+        //Load map google
+        var googleStreets = new L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{minZoom:1, maxZoom:19, subdomains:['mt0','mt1','mt2','mt3']});
+
+        var googleSat = new L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{minZoom:1, maxZoom: 21,subdomains:['mt0','mt1','mt2','mt3']});
+
+        var openSM = new L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+        var map = new L.Map('mapDiv', { doubleClickZoom:false, zoomControl:true, maxBounds:([[90,-270],[-90,270]]) });
+
+        L.control.layers({"Google Street": googleStreets, "Google Earth": googleSat, "OpenStreetMap": openSM}).addTo(map);
+
+        map.addLayer(googleStreets); //Mặc định load GoogleStreet Map
+        var map_set = "googleStreets";
+        map.fitBounds([[0,-180],[0,180]]);
+        map.setView([10.03056, 105.76521], 13); //Tọa độ mặc định ban đầu (Cần Thơ | Zoom 13)
+
+        //Thêm nút Locate
+        L.control.locate({strings: {title: "Show me where I am"}}).addTo(map);
+
+        //Thêm nút Search
+        var searchControl = new L.esri.Controls.Geosearch().addTo(map);
+        var results = new L.LayerGroup().addTo(map);
+        searchControl.on('results', function(data){
+            results.clearLayers();
+            for (var i = data.results.length - 1; i >= 0; i--) {
+                var lat  = data.results[i].latlng.lat.toFixed(5);
+                var lon  = data.results[i].latlng.lng.toFixed(5);
+                createMarker([lat, lon]);
+            }
+        });
+        setTimeout(function(){$('.pointer').fadeOut('slow');},3400);
+    </script>
+
+    <!-- THÊM ĐIỂM -->
+    <script>
+        var markers = [];
+        function createMarker(coordinates){
+            var id;
+            if (markers.length < 1) 
+                id = 0;
+            else 
+                id = markers[markers.length - 1]._id + 1;
+
+            var popupContent ='<center><div class="popupContent"><p class="pop_title">Coordinates:</p><span class="pop_content" id="span_' + id + '"> ' + coordinates +'</span></div><div class="pop_control"><button class="btn_ctrl copy" id="btn_' + id + '" onclick="copyCoord(' + id + ')" title="Copy this coordinate (Latitude/Longitude)"><i class="fas fa-copy"></i></button><button class="btn_ctrl delete" onclick="clearMarker(' + id + ')" title="Delete this marker"><i class="fas fa-trash"></i></button><button class="btn_ctrl done" onclick="" title="Done! Stop adding markers."><i class="fas fa-check"></i></button></div></center>';
+            myMarker = L.marker(coordinates, {draggable: true});
+            myMarker._id = id;
+            var myPopup = myMarker.bindPopup(popupContent, {closeButton: true});
+            map.addLayer(myMarker);
+            markers.push(myMarker);
+        }
+        function clearMarker(id) {
+            console.log(markers);
+            var new_markers = [];
+            markers.forEach(function(marker) {
+                if (marker._id == id) 
+                    map.removeLayer(marker);
+                else 
+                    new_markers.push(marker);
+            });
+          markers = new_markers;
+        }
+
+        //Copy tọa độ vào clipboard
+        function copyCoord(id){
+            var copyText = document.getElementById("span_"+id);
+            var textArea = document.createElement("textarea");
+            textArea.value = copyText.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'Successfully' : 'Unsuccessfully';
+                console.log(msg + ' copied to clipboard ');
+            } catch (err) {
+              console.log('Oops, unable to copy');
+            }
+            document.body.removeChild(textArea);
+            document.getElementById("btn_"+id).innerHTML = "Copied!";
+        }
+    </script>
+
+    <!-- On Map Click -->
+    <script>
+        function onMapClick(e) {
+            var lat  = e.latlng.lat.toFixed(5);
+            var lon  = e.latlng.lng.toFixed(5);
+            createMarker([lat, lon]);
+            myMarker.openPopup();
+        }
+        map.on('click', onMapClick);    
+    </script>
+</body>
+</html>

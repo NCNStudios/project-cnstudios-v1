@@ -1,0 +1,80 @@
+table th , table td{
+  
+    text-align: center;
+}
+
+table tr:nth-child(even){
+    background-color: #e4e3e3
+}
+
+th {
+  background: #333;
+  color: #fff;
+}
+
+.pagination {
+  margin: 10px;
+}
+.pagination li{
+    margin-right: 2px;
+    background-color: rgb(51, 51, 51);
+    color: rgb(255, 255, 255);
+    padding: 5px;
+}
+
+.pagination .active{
+  background-color: rgb(255, 87, 34);
+}
+.pagination li:hover{
+  cursor: pointer;
+}
+
+.header_wrap {
+  padding:0px 0;
+}
+.num_rows {
+  width: 50%;
+  float:left;
+}
+.tb_search{
+  margin-bottom: 2em;
+}
+.pagination-container {
+  width: 70%;
+  float:left;
+}
+
+.rows_count {
+  width: 20%;
+  float:right;
+  text-align:right;
+  color: #999;
+}
+
+.btn_taohoadon, .btn_suabanggia, .btn_themnhatro, .btn_suanhatro{
+    cursor: inherit;
+    background-color: rgb(139, 195, 74);
+    font-size: 14px;
+    border-radius: 10em;
+    color: rgb(255, 255, 255);
+    padding: .5em;
+}
+
+.bill_tblDes{
+  font-size: 11px;
+  color: rgb(3, 169, 244);
+}
+
+.btn_addmember{
+  cursor: inherit;
+  background-color: rgb(139, 195, 74);
+  font-size: 14px;
+  border-radius: 10em;
+  color: rgb(255, 255, 255);
+  padding: .5em;
+  margin-bottom: .5em;
+}
+
+.sel_loaiphong{
+  border: none;
+}

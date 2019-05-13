@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+    />
+    <title>CoordinateConversion widget - 4.11</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.11/esri/themes/light/main.css"
+    />
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
+    <script src="https://js.arcgis.com/4.11/"></script>
+    <script>
+      require([
+        "esri/views/MapView",
+        "esri/widgets/CoordinateConversion",
+        "esri/Map"
+      ], function(MapView, CoordinateConversion, Map) {
+        var map = new Map({
+          basemap: "topo"
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-117.049, 34.485],
+          zoom: 12
+        });
+
+        var ccWidget = new CoordinateConversion({
+          view: view
+        });
+
+        view.ui.add(ccWidget, "top-right");
+      });
+    </script>
+    
+  </head>
+
+  <body>
+    <div id="viewDiv" style="height: 90%"></div>
+    <div class="input" style="display: flex;">
+      <h6>Coordinate: </h6><input type="text" id="lat" name="">
+      <button onclick="get();">get</button>
+    </div>
+  </body>
+  <script>
+        function get(){
+          var val = document.getElementsByClassName('esri-coordinate-conversion__display').getAttribute('aria-label');
+          alert(val);
+        }
+    </script>
+</html>

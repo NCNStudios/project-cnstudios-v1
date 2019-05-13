@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2019 by anonymous (http://jsbin.com/OsuKOfA/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.7/js/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        height: 100%; width: 100%; margin: 0; padding: 0; 
+      }
+    </style>
+
+    <script src="https://js.arcgis.com/3.7/"></script>
+    <script src="https://js.arcgis.com/3.28/"></script>
+    <script>
+      var map;
+    
+      require([
+        "esri/map", 
+        "esri/geometry/Point",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/graphic", 
+        "esri/layers/GraphicsLayer",
+        "esri/symbols/PictureMarkerSymbol",
+        "esri/dijit/LocateButton",
+        "dojo/domReady!"
+      ], function(
+        Map, Point, SimpleMarkerSymbol, Graphic, GraphicsLayer, PictureMarkerSymbol, LocateButton
+      ) {
+        map = new Map("map", {
+          basemap: "streets",
+          center: [-88.21,42.21],
+          zoom: 10
+        });
+        map.on("load", function() {
+          var gl = new GraphicsLayer();
+          var p = new Point(-88.380801, 42.10560);
+          var p2 = new Point(-88.380801, 42.3);
+          var p3 = new Point(-88.380801, 42.2);
+          var s = new PictureMarkerSymbol('https://flatout.com.au/wp-content/uploads/2018/08/Map-Marker-PNG-File.png', 40, 40);
+
+          var g0 = new Graphic(p, s);
+          var g1 = new Graphic(p2, s);
+          var g2 = new Graphic(p3, s);
+            gl.add(g0);
+            gl.add(g1);
+            gl.add(g2);
+          
+          map.addLayer(gl);
+
+        });
+
+        geoLocate = new LocateButton({
+        map: map
+      }, "LocateButton");
+      geoLocate.startup();
+
+      });
+    </script>
+  </head>
+  <body>
+    <div id="map">
+      <div id="LocateButton"></div>
+    </div>
+  </body>
+</html>

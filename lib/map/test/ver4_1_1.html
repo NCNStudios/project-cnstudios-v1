@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+    />
+    <title>Arcgis map for JS ver 4.11</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css"/>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    <script src="https://js.arcgis.com/4.11/"></script>
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/views/SceneView",
+        "esri/widgets/Locate",
+        "esri/layers/GraphicsLayer",
+        "esri/Graphic"
+      ], function(Map, MapView, SceneView, Locate, GraphicsLayer, Graphic) {
+        var map = new Map({
+          basemap: "streets",
+          ground: "world-elevation"
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [105.78825, 10.03711],
+          zoom: 17
+        });
+
+        var graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        var point = {
+          type: "point", // autocasts as new Point()
+          x: 105.78825,//long
+          y: 10.03711,//lat
+          z: 1010
+        };
+
+        markerSymbol = {
+          type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+          color: [51, 51, 255],
+          outline: {
+            // autocasts as new SimpleLineSymbol()
+            color: [255, 255, 255],
+            width: 2
+          }
+        };
+
+        var pointGraphic = new Graphic({
+          geometry: point,
+          symbol: markerSymbol
+        });
+
+        graphicsLayer.add(pointGraphic);
+
+        var locateBtn = new Locate({
+          view: view
+        });
+
+        view.ui.add(locateBtn, {
+          position: "top-left"
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
